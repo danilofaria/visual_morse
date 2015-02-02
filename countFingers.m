@@ -1,4 +1,4 @@
-function [num_fingers, final_mask] = countFingers(largest_blob)
+function [num_fingers, final_mask, cx, cy] = countFingers(largest_blob)
 	% compute centroid of blob (center of mass)
 	stats=regionprops(largest_blob,'Centroid');
     cx=stats.Centroid(1);
@@ -31,8 +31,12 @@ function [num_fingers, final_mask] = countFingers(largest_blob)
     final_mask=largest_blob-final_mask;
     % get rid of small blobs (noise)
     final_mask=bwareaopen(final_mask,300);
+
+    final_mask=imerode(final_mask,strel('disk',2));
+    final_mask=bwareaopen(final_mask,400);
+
     % compute number of fingers up
-    [L,num_fingers]=bwlabel(final_mask,8)
+    [L,num_fingers]=bwlabel(final_mask,8);
     % clear image border
     final_mask=imclearborder(final_mask,8);
 end
