@@ -31,10 +31,10 @@ function [num_fingers, final_mask, cx, cy] = countFingers(largest_blob)
     final_mask=largest_blob-final_mask;
     % get rid of small blobs (noise)
     final_mask=bwareaopen(final_mask,300);
-
+    % erode a bit
     final_mask=imerode(final_mask,strel('disk',2));
+    % get rid of small blobs (noise)
     final_mask=bwareaopen(final_mask,400);
-
     % compute number of fingers up
     [L,num_fingers]=bwlabel(final_mask,8);
     % clear image border

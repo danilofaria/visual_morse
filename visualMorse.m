@@ -31,7 +31,9 @@ function visualMorse()
 	tic;
     figure();
 	    
-	for idx = 1:30000
+    first_iteration = true;
+
+	while true 
 		time_passed = time_passed + toc;
 		% acquire image from webcam
 		rgbImage=snapshot(mywebcam);
@@ -44,12 +46,13 @@ function visualMorse()
 		% Convert to HSV color space
 		hsv_img=rgb2hsv(rgbImage);
 
-		if idx==1
+		if first_iteration
 			imshow(rgbImage);
 			% capture coordinate of pixel in hand
 			coords=ginput(1);
 			% color of the pixel in the hsv color space
 			hsv_color = impixel(hsv_img,coords(1),coords(2));
+			first_iteration = false;
 		end
 
 		% compute largest blob, i.e a bw mask of the user's hand
